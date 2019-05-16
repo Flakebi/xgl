@@ -339,7 +339,12 @@ void PipelineCompiler::DropPipelineBinaryInst(
         Pal::Result palResult = abiProcessor.LoadFromBuffer(pPipelineBinary, pipelineBinarySize);
         if (palResult == Pal::Result::Success)
         {
-            abiProcessor.GetPipelineCode(&pPipelineCode, &pipelineCodeSize);
+            // TODO There can be more than one code segment
+            // By the way, what is happening here?
+            // We first parse the ELF,
+            // then get the first instruction
+            // and then linearly search the ELF for the first instruction??
+            //abiProcessor.GetPipelineCode(&pPipelineCode, &pipelineCodeSize);
         }
 
         VK_ASSERT(pPipelineCode != nullptr);
@@ -409,7 +414,8 @@ void PipelineCompiler::ReplacePipelineIsaCode(
     if (palResult == Pal::Result::Success)
     {
         // the elf .text section ISA shader code
-        abiProcessor.GetPipelineCode(&pPipelineCode, &pipelineCodeSize);
+        //abiProcessor.GetPipelineCode(&pPipelineCode, &pipelineCodeSize);
+        return;
     }
     else
     {
