@@ -1498,6 +1498,11 @@ VkResult PhysicalDevice::GetDeviceProperties(
     VK_ASSERT(VULKAN_ICD_BUILD_VERSION < (1 << 12));
     pProperties->driverVersion = (VULKAN_ICD_MAJOR_VERSION << 22) | (VULKAN_ICD_BUILD_VERSION & ((1 << 22) - 1));
 
+    char *env_version = getenv("AMDVLK_VERSION_XOR");
+    if (env_version) {
+        pProperties->driverVersion ^= atoi(env_version);
+    }
+
     // Convert PAL properties to Vulkan
     pProperties->vendorID   = palProps.vendorId;
     pProperties->deviceID   = palProps.deviceId;
@@ -3613,6 +3618,12 @@ void PhysicalDevice::GetDeviceProperties2(
                 &pIDProperties->deviceLUID[0],
                 &pIDProperties->deviceNodeMask,
                 &pIDProperties->deviceLUIDValid);
+
+            char *env_version = getenv("AMDVLK_VERSION_XOR");
+            if (env_version) {
+                pIDProperties->driverUUID[0] ^= atoi(env_version);
+            }
+
             break;
         }
         case VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT:
