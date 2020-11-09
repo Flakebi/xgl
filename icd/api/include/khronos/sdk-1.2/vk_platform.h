@@ -53,7 +53,7 @@ extern "C"
     #define VKAPI_PTR  VKAPI_ATTR
 #else
     // On other platforms, use the default calling convention
-    #define VKAPI_ATTR
+    #define VKAPI_ATTR __attribute__((force_align_arg_pointer))
     #define VKAPI_CALL
     #define VKAPI_PTR
 #endif
